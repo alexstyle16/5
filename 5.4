@@ -1,0 +1,55 @@
+def input_error(func):
+    def inner(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ValueError:
+            return "Give me name and phone please."
+        except KeyError:
+            return "No such contact found."
+        except IndexError:
+            return "Not enough arguments provided."
+
+    return inner
+
+@input_error
+def add_contact(args, contacts):
+    name, phone = args
+    contacts[name] = phone
+    return "Contact added."
+
+@input_error
+def change_contact(args, contacts):
+    name, phone = args
+    if name in contacts:
+        contacts[name] = phone
+        return "Contact updated."
+    else:
+        return "No such contact found."
+
+@input_error
+def show_phone(args, contacts):
+    name = args[0]
+    if name in contacts:
+        return contacts[name]
+    else:
+        return "No such contact found."
+
+@input_error
+def show_all(args, contacts):
+    if not contacts:
+        return "No contacts found."
+    else:
+        return contacts
+
+# Приклад використання:
+contacts = {}
+commands = [
+    ("add John 1234567890", add_contact),
+    ("change John 0987654321", change_contact),
+    ("phone John", show_phone),
+    ("all", show_all),
+]
+
+for command, func in commands:
+    result = func(command.split()[1:], contacts)
+    print(result)
