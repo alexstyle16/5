@@ -1,0 +1,15 @@
+import re
+from typing import Callable
+
+def generator_numbers(text: str):
+    pattern = r'\b\d+\.\d+\b'
+    for match in re.finditer(pattern, text):
+        return float(match.group())
+
+def sum_profit(text: str, func: Callable):
+    return sum(func(text))
+
+# Приклад використання:
+text = "Profit for this month: 1000.5, last month: 750.25, total profit: 1750.75"
+total_profit = sum_profit(text, generator_numbers)
+print(total_profit)  # Виведе: 1750.75
